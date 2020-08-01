@@ -19,17 +19,16 @@ class MainActionCreator(
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     suspend fun fetchItems() = withContext(coroutineContext) {
-        try {
-            val items = repository.getItem()
-            val action = if (items == null) {
+        val action = try {
+            val items = repository.fetchItems()
+            if (items == null) {
                 MainAction.FetchItems(Result.Failure("Value is Null"))
             } else {
                 MainAction.FetchItems(Result.Success(items))
             }
-            dispatcher.dispatch(action)
         } catch (e: Exception) {
-            val action = MainAction.FetchItems(Result.Failure(e.message ?: "Null Error Message"))
-            dispatcher.dispatch(action)
+            MainAction.FetchItems(Result.Failure(e.message ?: "Null Error Message"))
         }
+        dispatcher.dispatch(action)
     }
 }

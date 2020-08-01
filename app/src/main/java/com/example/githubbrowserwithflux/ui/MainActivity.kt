@@ -1,7 +1,6 @@
 package com.example.githubbrowserwithflux.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +13,7 @@ import com.example.githubbrowserwithflux.ui.main.MainActionCreator
 import com.example.githubbrowserwithflux.ui.main.MainStore
 import com.example.githubbrowserwithflux.util.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
@@ -37,10 +37,10 @@ class MainActivity : AppCompatActivity() {
         store.items.observe(this, Observer {
             when (it) {
                 is Result.Success -> {
-                    Log.d("debug", "${it.value ?: "Null Items"}")
+                    Timber.i("${it.value ?: "Null Items"}")
                 }
                 is Result.Failure -> {
-                    Log.d("debug", "${it.msg}")
+                    Timber.i(it.msg)
                 }
             }
         })
